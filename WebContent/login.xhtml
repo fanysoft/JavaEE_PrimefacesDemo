@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	>
+	
+<h:head>
+	<h:outputScript library="javax.faces" name="jsf.js"/>
+</h:head>
+<h:body>
+	
+	<f:view>
+		<br/>
+		<br/>
+		<h:form prependId="false" id="form" styleClass="styleGreen">
+		
+		<p:growl id="msgs" showDetail="true" />
+		
+		<p:panel id="panel" header="Login" style="width: 400px; position:relative; left:100px">
+		 	
+		 	<br/>
+			<h:messages globalOnly="true" style="color:red"></h:messages>
+			<p:panelGrid columns="2">
+	
+		 		<p:outputLabel for="username" value="User : " />
+				<p:inputText id="username" value="#{loginBean.username}" required="true"/>
+	
+	 			<p:outputLabel for="password" value="Password : " />
+				<p:inputText id="password" value="#{loginBean.password}" required="true"/>
+				
+				<p:outputLabel for="date_from" value="Data from :" />
+        		<p:calendar id="date_from" value="#{loginBean.date_from}" required="true">
+            	<p:ajax event="dateSelect" listener="#{loginBean.onDateSelect}" update="msgs"/>
+        		</p:calendar>
+        
+        		<p:outputLabel for="date_to" value="Data to :" />
+        		<p:calendar id="date_to" value="#{loginBean.date_to}" required="true">
+            	<p:ajax event="dateSelect" listener="#{loginBean.onDateSelect}" update="msgs"/>
+        		</p:calendar>
+				
+			</p:panelGrid>
+			
+			<br/><br/>
+			<p:commandButton action="#{loginBean.login}" value="Login" update="@form" ajax="false"></p:commandButton>
+			<p:commandButton action="#{loginBean.reset}" value="Reset" update="@form" ajax="false"></p:commandButton>
+			 
+	    </p:panel> 
+			 
+		</h:form>
+	</f:view>
+</h:body>
+</html>

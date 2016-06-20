@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	>
+<h:head>
+	<h:outputScript library="javax.faces" name="jsf.js"/>
+</h:head>
+<h:body>
+	
+	<f:view>	
+	
+			<br/>  
+			<br/>
+			
+			<!--  zahlavi -->
+			<p:dataTable var="car" value="#{loginBean}" style="width: 400px; position:relative; left:50px">
+			    <p:column headerText="User">
+			        <h:outputText value="#{loginBean.username}" />
+			    </p:column>
+			 
+			    <p:column headerText="Date from">
+			    	<h:outputText value="#{loginBean.date_from}" >
+			        	<!--format dat : Thu Jun 02 00:00:00 CEST 2016 -->
+				        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="Europe/Berlin"/>
+			        </h:outputText>
+			    </p:column>
+			 
+			    <p:column headerText="Date to">
+			        <h:outputText value="#{loginBean.date_to}">
+			        	<f:convertDateTime pattern="dd.MM.yyyy" timeZone="Europe/Berlin"/>
+			        </h:outputText>
+			    </p:column>
+			</p:dataTable>
+			
+			<br/>  
+			<br/>
+			
+			
+			<!--  table hodnot -->
+			<p:dataTable var="spotreba" value="#{tableViewBean.event}" style="width: 500px; position:relative; left:50px">
+	    
+			    <p:column headerText="Datum">
+			        <h:outputText value="#{spotreba.timestamp}" >
+			        	 <f:convertDateTime pattern="dd.MM.yyyy" />	
+			        </h:outputText> 
+			    </p:column>
+			 
+			    <p:column headerText="Elektřina (kWh)">
+			        <h:outputText value="#{spotreba.ele}" />
+			    </p:column>
+			 
+			    <p:column headerText="Plyn (kWh)">
+			        <h:outputText value="#{spotreba.plyn}" />
+			    </p:column>
+			 
+			    <p:column headerText="Voda (litr)">
+			        <h:outputText value="#{spotreba.voda}" />
+			    </p:column>
+			    
+			    <p:column headerText="Temp (stC)">
+			        <h:outputText value="#{spotreba.temp}" />
+			    </p:column>
+	    
+			</p:dataTable>	
+				
+			
+			<br/>  
+			<br/>
+		
+			<!--  graf -->	
+            <p:chart type="line" model="#{chartView.lineModel1}" style="width: 1200px; height: 600px; position:relative; left:50px"/>
+       		
+       		<br/>  
+			<br/>
+		
+	</f:view>
+</h:body>
+</html>
