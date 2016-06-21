@@ -43,8 +43,8 @@ public class ChartView implements Serializable {
    // JDBC driver name and database URL
    final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
    final String DB_URL = "jdbc:mysql://wh19.farma.gigaserver.cz:3306/vancura_cz_";
-   final String USER = "vancura_cz";
-   final String PASS = "katerina";
+   final String USER = "";
+   final String PASS = "";
    
    Connection conn = null;
    Statement stmt = null;
