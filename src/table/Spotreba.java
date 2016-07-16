@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Spotreba {
 	
-	Date timestamp;
+	String timestamp;
 	int ele;
 	int plyn;
 	int voda;
@@ -12,7 +12,7 @@ public class Spotreba {
 	
 	
 	// konstruktor
-	public Spotreba(Date db_date, int db_value1, int db_value2, int db_value3, int db_value4) {
+	public Spotreba(String db_date, int db_value1, int db_value2, int db_value3, int db_value4) {
 
 		this.timestamp = setTimestamp(db_date);
 		this.ele = setEle(db_value1);
@@ -23,11 +23,11 @@ public class Spotreba {
 
 	// Getters + Setters
 	
-	public Date getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public Date setTimestamp(Date db_date) {
+	public String setTimestamp(String db_date) {
 		return this.timestamp = db_date;
 	}
 

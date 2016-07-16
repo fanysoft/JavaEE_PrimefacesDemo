@@ -29,8 +29,8 @@ import bean.IndexBean;
 @ManagedBean
 public class ChartView implements Serializable {
 
- 	
    private LineChartModel lineModel1;
+   private LineChartModel lineModel2;
   
    // import IndexBean - pro prenost values from, to
    @ManagedProperty(value="#{loginBean}")
@@ -59,28 +59,47 @@ public class ChartView implements Serializable {
        return lineModel1;
    }
    
+   public LineChartModel getLineModel2() {
+       return lineModel2;
+   }
+   
+   
     
    private void createLineModels() {
 	   
-       lineModel1 = initLinearModel();
+       lineModel1 = initLinearModel1();
        lineModel1.setTitle("");
        lineModel1.setLegendPosition("e");
-
        // y je horizontalni osa
        Axis yAxis = lineModel1.getAxis(AxisType.Y);
        yAxis.setMin(0);
        //yAxis.setMax(4000); 
-       
        // x osa
        DateAxis xAxis = new DateAxis("");
        xAxis.setTickAngle(-90);
        //xAxis.setMax("2016-06-25");
        lineModel1.getAxes().put(AxisType.X, xAxis);
+       
+       
+       lineModel2 = initLinearModel2();
+       lineModel2.setTitle("");
+       lineModel2.setLegendPosition("e");
+       // y je horizontalni osa
+       Axis yAxis2 = lineModel2.getAxis(AxisType.Y);
+       yAxis2.setMin(0);
+       //yAxis.setMax(4000); 
+       // x osa
+       DateAxis xAxis2 = new DateAxis("");
+       xAxis2.setTickAngle(-90);
+       //xAxis.setMax("2016-06-25");
+       lineModel2.getAxes().put(AxisType.X, xAxis2);
         
        
    }
-    
-   private LineChartModel initLinearModel() {
+   
+// graf ele, plym   
+   private LineChartModel initLinearModel1() {
+	   
        LineChartModel model = new LineChartModel();
 
        LineChartSeries series1 = new LineChartSeries();
@@ -88,12 +107,6 @@ public class ChartView implements Serializable {
 
        LineChartSeries series2 = new LineChartSeries();
        series2.setLabel("Plyn (kWh)");
-       
-       LineChartSeries series3 = new LineChartSeries();
-       series3.setLabel("Voda (l)");
-       
-       LineChartSeries series4 = new LineChartSeries();
-       series4.setLabel("Teplota (stC)");
        
        
        try {
@@ -113,7 +126,7 @@ public class ChartView implements Serializable {
 		   
 		   String sql = null;
 		   
-		   sql = "SELECT timestamp, ele, plyn, voda, temp FROM energie WHERE timestamp between '" + sdf.format(datum_omezeni_from) + "' and '" + sdf.format(datum_omezeni_to) + "'";
+		   sql = "SELECT timestamp, ele, plyn FROM energie WHERE timestamp between '" + sdf.format(datum_omezeni_from) + "' and '" + sdf.format(datum_omezeni_to) + "' ORDER BY timestamp";
 		   System.out.println("Chart - " + sql);
 		   
 		   ResultSet rs = stmt.executeQuery(sql);
@@ -124,18 +137,15 @@ public class ChartView implements Serializable {
 			   pocet=pocet+1;
 			   
 			   String db_date  = rs.getString("timestamp"); // format 2016-06-03 00:01:00
+			   db_date = db_date.substring(0, 10);
 			   
 		       int db_value1 = Integer.parseInt(rs.getString("ele"));
 		       int db_value2 = Integer.parseInt(rs.getString("plyn"));
-		       int db_value3 = Integer.parseInt(rs.getString("voda"));
-		       int db_value4 = Integer.parseInt(rs.getString("temp"));
 		       
-			   series1.set(db_date.substring(0, 10), db_value1);
-		       series2.set(db_date.substring(0, 10), db_value2);
-		       series3.set(db_date.substring(0, 10), db_value3);
-		       series4.set(db_date.substring(0, 10), db_value4);
+			   series1.set(db_date, db_value1);
+		       series2.set(db_date, db_value2);
 		       
-		       System.out.print("Chart - From dB : date=" + db_date + " value1=" + db_value1 + " value2=" + db_value2 +"\n");		       
+		       System.out.print("Chart - From dB : date=" + db_date + " value1=" + db_value1 + " value2=" + db_value2 + "\n");	       
 		   }
 		   
 		   if (pocet ==  0 ) {
@@ -175,12 +185,104 @@ public class ChartView implements Serializable {
       
        model.addSeries(series1);
        model.addSeries(series2);
-       model.addSeries(series3);
-       model.addSeries(series4);
        
        return model;
    }
   
+   
+   // graf voda, temp
+   private LineChartModel initLinearModel2() {
+	   
+       LineChartModel model2 = new LineChartModel();
+
+       LineChartSeries series3 = new LineChartSeries();
+       series3.setLabel("Voda (l)");
+       
+       LineChartSeries series4 = new LineChartSeries();
+       series4.setLabel("Teplota (stC)");
+       
+       
+       try {
+    	   
+	       Class.forName("com.mysql.jdbc.Driver");
+		   conn = DriverManager.getConnection(DB_URL,USER,PASS);
+		   stmt = conn.createStatement();
+		   
+		   
+		   // nacti Bean z indexBean a omezit SQL    // format datumu > Thu Jun 02 00:00:00 CEST 2016   
+		   Date datum_omezeni_from = (Date) indexBean.date_from;
+		   Date datum_omezeni_to = (Date) indexBean.date_to;
+		   
+		   // zmena format datumu
+		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		   System.out.print("Chart - omezeni datum from=" + sdf.format(datum_omezeni_from) + " to=" + sdf.format(datum_omezeni_to) + " \n");
+		   
+		   String sql = null;
+		   
+		   sql = "SELECT timestamp, voda, temp FROM energie WHERE timestamp between '" + sdf.format(datum_omezeni_from) + "' and '" + sdf.format(datum_omezeni_to) + "' ORDER BY timestamp";
+		   System.out.println("Chart - " + sql);
+		   
+		   ResultSet rs = stmt.executeQuery(sql);
+		   
+		   int pocet=0;
+		   while(rs.next()){
+	    	 
+			   pocet=pocet+1;
+			   
+			   String db_date  = rs.getString("timestamp"); // format 2016-06-03 00:01:00
+			   db_date = db_date.substring(0, 10);
+			   
+		       int db_value3 = Integer.parseInt(rs.getString("voda"));
+		       int db_value4 = Integer.parseInt(rs.getString("temp"));
+		       
+			   series3.set(db_date, db_value3);
+		       series4.set(db_date, db_value4);
+		       
+		       System.out.print("Chart - From dB : date=" + db_date + " value3=" + db_value3 + "  value4=" + db_value4 + "\n");	       
+		   }
+		   
+		   if (pocet ==  0 ) {
+			   System.out.println("POZOR : v dB nic nenalezeno !");
+		   }
+		   
+		   rs.close();
+		   stmt.close();
+		   conn.close();
+       
+       	  }catch(SQLException se){
+		      //Handle errors for JDBC
+			  se.printStackTrace();
+			  System.out.println("JDBC Error " + se);
+			  
+		  }catch(Exception e){
+		      //Handle errors for Class.forName
+		      e.printStackTrace();
+		      System.out.println("Error " + e);
+		      
+		  }finally{
+		      //finally block used to close resources
+		      try{
+		         if(stmt!=null)
+		            stmt.close();
+		      }catch(SQLException se2){
+		      }// nothing we can do
+		      try{
+		         if(conn!=null)
+		            conn.close();
+		      }catch(SQLException se){
+		         se.printStackTrace();
+		      }//end finally try
+		   }//end try
+       
+       
+       
+       model2.addSeries(series3);
+       model2.addSeries(series4);
+       
+       return model2;
+   }
+  
+   
 
 }
 

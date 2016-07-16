@@ -59,23 +59,21 @@ public class DbService {
 				System.out.print("Table - omezeni datum form=" + sdf.format(datum_omezeni_from) + " to=" + sdf.format(datum_omezeni_to) + " \n");
 					
 				String sql;
-				sql = "SELECT timestamp, ele, plyn, voda, temp FROM energie WHERE timestamp between '" + sdf.format(datum_omezeni_from) + "' and '" + sdf.format(datum_omezeni_to) + "'";
+				sql = "SELECT timestamp, ele, plyn, voda, temp FROM energie WHERE timestamp between '" + sdf.format(datum_omezeni_from) + "' and '" + sdf.format(datum_omezeni_to) + "' ORDER BY timestamp";
 				System.out.println("Table - " + sql);
 				
 				ResultSet rs = stmt.executeQuery(sql);
 				
 				while(rs.next()){
 			    	 
-					  String db_date  = rs.getString("timestamp");
-					  DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-					  Date db_date2  = format.parse(db_date);
+					  String db_date  = rs.getString("timestamp"); // 2016-06-03 00:01:00.0
 					  int db_value1 = Integer.parseInt(rs.getString("ele"));
 					  int db_value2 = Integer.parseInt(rs.getString("plyn"));
 					  int db_value3 = Integer.parseInt(rs.getString("voda"));
 					  int db_value4 = Integer.parseInt(rs.getString("temp"));
 					       
-					  list.add(new Spotreba(db_date2, db_value1, db_value2, db_value3, db_value4));
-					  System.out.print("Table - From dB : date=" + db_date + " value1=" + db_value1 + " value2=" + db_value2 +"\n");		       
+					  list.add(new Spotreba(db_date.substring(0, 10), db_value1, db_value2, db_value3, db_value4));
+					  System.out.print("Table - From dB : date=" + db_date.substring(0, 10) + " value1=" + db_value1 + " value2=" + db_value2 +"\n");		       
 				   }
 		
 				rs.close();

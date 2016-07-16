@@ -45,8 +45,7 @@
 			<p:dataTable var="spotreba" value="#{tableViewBean.event}" style="width: 500px; position:relative; left:50px">
 	    
 			    <p:column headerText="Datum">
-			        <h:outputText value="#{spotreba.timestamp}" >
-			        	 <f:convertDateTime pattern="dd.MM.yyyy" />	
+			        <h:outputText value="#{spotreba.timestamp}" >    	 	
 			        </h:outputText> 
 			    </p:column>
 			 
@@ -72,12 +71,18 @@
 			<br/>  
 			<br/>
 		
-			<!--  graf -->	
+			<!--  graf 1 -->	
             <p:chart type="line" model="#{chartView.lineModel1}" style="width: 1200px; height: 600px; position:relative; left:50px"/>
        		
        		<br/>  
 			<br/>
+			
+			<!--  graf 2 -->	
+            <p:chart type="line" model="#{chartView.lineModel2}" style="width: 1200px; height: 600px; position:relative; left:50px"/>
 		
+			<br/>  
+			<br/>
+			
 	</f:view>
 </h:body>
 </html>
