@@ -1,18 +1,16 @@
-package table;
+package DB;
 
 import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 
-@ManagedBean(name="tableViewBean")
-@SessionScoped
-public class TableView implements Serializable {
+@ManagedBean(name="dataBean")
+@RequestScoped
+public class DataBean implements Serializable {
 	
 	private List<Spotreba> event;
 	
@@ -21,12 +19,12 @@ public class TableView implements Serializable {
  
     @PostConstruct
     public void init() {
-    	// provede se jen jednou pri startu
-    	System.out.println("table event init \n");
+    	// nahraj data do dB
         event = service.createDB();
     }
      
     public List<Spotreba> getEvent() {
+    	// vyzvedni data
         return event;
     }
  

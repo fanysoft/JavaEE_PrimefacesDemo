@@ -1,4 +1,4 @@
-package table;
+package DB;
 
 import java.util.Date;
 

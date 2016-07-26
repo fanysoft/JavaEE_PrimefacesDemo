@@ -4,15 +4,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name="loginBean")
-@SessionScoped
+@RequestScoped
 public class IndexBean {
 	
 	private String username;
@@ -22,17 +21,15 @@ public class IndexBean {
 	
 	
 	public IndexBean() {
-		System.out.println("loginBean started");
+		System.out.println("#### APP STARTED ####");
 	}	      
 
 	
-	
 	public String login(){
-		System.out.println("login..");
 		
 		Boolean check=true;
 		
-		if(this.username.equalsIgnoreCase("pepa") && this.password.equals("heslo")){
+		if(this.username.equalsIgnoreCase("user") && this.password.equals("heslo")){
 			System.out.println("Login User : date OK");
 		}
 		else {
